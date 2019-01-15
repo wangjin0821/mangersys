@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wiggin.mangersys.domain.mapper.ApiUserMapper">
+
+    <!-- 
+    <resultMap id="BaseResultMap" type="com.wiggin.mangersys.domain.entity.ApiUser">
+        <id column="id" property="id" />
+        <result column="user_name" property="userName" />
+        <result column="pass_word" property="passWord" />
+        <result column="name" property="name" />
+        <result column="avater" property="avater" />
+        <result column="telphone" property="telphone" />
+        <result column="dep_id" property="depId" />
+        <result column="status" property="status" />
+        <result column="token" property="token" />
+        <result column="token_expire" property="tokenExpire" />
+        <result column="create_time" property="createTime" />
+        <result column="modify_time" property="modifyTime" />
+    </resultMap> 通用查询映射结果 -->
+
+</mapper>
