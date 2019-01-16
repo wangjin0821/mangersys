@@ -593,7 +593,7 @@ export default {
     },
     deleteSelected() {
       this.delLoading = true
-      deleteMenu(this.form.id).then(res => {
+      deleteMenu({ ids: [this.form.id]}).then(res => {
           this.delLoading = false
           this.$message(res.message)
           this.load()
@@ -614,7 +614,7 @@ export default {
         type: 'warning'
       }).then(() => {
         this.batchDelLoading = true
-        deleteMenu(checkKeys).then(res => {
+        deleteMenu({ ids: checkKeys}).then(res => {
           this.batchDelLoading = false
           this.$message(res.message)
           this.load()
