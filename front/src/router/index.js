@@ -36,7 +36,7 @@ export const constantRouterMap = [
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
-  {
+  /* {
     path: '/example',
     component: Layout,
     redirect: '/example/table',
@@ -56,7 +56,7 @@ export const constantRouterMap = [
         meta: { title: 'Tree', icon: 'tree' }
       }
     ]
-  },
+  },*/
   { path: '*', redirect: '/404', hidden: true }
 ]
 

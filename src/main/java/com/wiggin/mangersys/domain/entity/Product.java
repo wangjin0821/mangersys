@@ -71,5 +71,5 @@ public class Product extends BaseEntity implements Serializable {
     /**
      * 是否删除
      */
-    private Integer isDeleted;
+//    private Integer isDeleted;
 }

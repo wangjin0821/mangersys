@@ -9,6 +9,7 @@ public enum ExceptionCodeEnum {
 	USER_NAME_IS_NULL(1001, "用户名不能为空"),
 	USER_OR_PASS_IS_ERROR(1002, "用户或密码错误"),
 	USER_STATUS_DISABLE(1003, "用户已经禁用"),
+	USER_TOKEN_NOT_FOUND(1004, "用户未登录"),
 	;
 	
 	private int code;

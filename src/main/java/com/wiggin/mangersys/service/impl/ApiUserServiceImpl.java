@@ -87,6 +87,9 @@ public class ApiUserServiceImpl implements ApiUserService {
 		ApiUser apiUser = new ApiUser();
 		apiUser.setToken(token);
 		ApiUser selectOne = apiUserMapper.selectOne(apiUser);
+		if (selectOne == null) {
+		    throw new CustomException(ExceptionCodeEnum.USER_TOKEN_NOT_FOUND);
+		}
 		UserInfoResponse userInfoResponse = new UserInfoResponse();
 		userInfoResponse.setAvatar(selectOne.getAvater());
 		userInfoResponse.setName(selectOne.getName());

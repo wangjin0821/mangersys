@@ -1,4 +1,4 @@
-package com.wiggin.mangersys;
+package com.wiggin.mangersys.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

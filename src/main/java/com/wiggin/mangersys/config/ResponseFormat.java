@@ -1,8 +1,5 @@
 package com.wiggin.mangersys.config;
 
-import java.util.Map;
-
-import com.google.common.collect.Maps;
 import com.wiggin.mangersys.web.vo.response.GenericResponse;
 
 public class ResponseFormat {

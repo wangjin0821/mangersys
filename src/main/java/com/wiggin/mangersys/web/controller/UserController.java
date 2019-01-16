@@ -27,7 +27,7 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/user")
-public class ApiUserController {
+public class UserController {
 	
 	@Autowired
 	private ApiUserService apiUserService;
@@ -51,6 +51,12 @@ public class ApiUserController {
 	@GetMapping("/info")
 	public UserInfoResponse info(@RequestParam("token") String token) {
 		return apiUserService.getInfo(token);
+	}
+	
+	
+	@PostMapping("/logout")
+	public void logout() {
+	    
 	}
 
 }

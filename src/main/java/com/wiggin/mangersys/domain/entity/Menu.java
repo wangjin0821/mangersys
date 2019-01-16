@@ -52,7 +52,7 @@ public class Menu implements Serializable {
     /**
      * 是否显示
      */
-    private Integer isShow;
+    private String isShow;
     /**
      * 菜单层级
      */

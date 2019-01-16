@@ -554,7 +554,7 @@ export default {
         sort: 0,
         icon: '',
         path: '',
-        isShow: '',
+        isShow: '1',
         delivery: false,
         parentId: null,
         desc: ''
@@ -585,7 +585,7 @@ export default {
         sort: 0,
         icon: '',
         path: '',
-        isShow: '',
+        isShow: '1',
         delivery: false,
         parentId: null,
         desc: ''
@@ -593,14 +593,10 @@ export default {
     },
     deleteSelected() {
       this.delLoading = true
-      deleteMenu({ menu_ids:[this.form.id] }).then(res => {
+      deleteMenu(this.form.id).then(res => {
           this.delLoading = false
-          if (res.data.status) {
-            this.$message(res.data.message)
-            this.load()
-          } else {
-            reject(res.data.message)
-          }
+          this.$message(res.message)
+          this.load()
       }).catch((error) => {
         this.delLoading = false
         this.$message.error(error)
@@ -618,14 +614,10 @@ export default {
         type: 'warning'
       }).then(() => {
         this.batchDelLoading = true
-        deleteMenu({ menu_ids: checkKeys }).then(res => {
+        deleteMenu(checkKeys).then(res => {
           this.batchDelLoading = false
-          if (res.data.status) {
-            this.$message(res.data.message)
-            this.load()
-          } else {
-            reject(res.data.message)
-          }
+          this.$message(res.message)
+          this.load()
         }).catch((error) => {
           this.batchDelLoading = false
           this.$message.error(error)
@@ -641,12 +633,8 @@ export default {
           this.addLoading = true
           saveMenu(this.form).then((res) => {
             this.addLoading = false
-            if (res.data.status) {
-              this.$message(res.data.message)
-              this.load()
-            } else {
-              reject(res.data.message)
-            }
+            this.$message(res.message)
+            this.load()
           }).catch((error) => {
             this.addLoading = false
             this.$message.error(error)

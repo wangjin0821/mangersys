@@ -1,4 +1,4 @@
-package com.wiggin.mangersys;
+package com.wiggin.mangersys.config;
 
 import java.util.ArrayList;
 import java.util.HashMap;
