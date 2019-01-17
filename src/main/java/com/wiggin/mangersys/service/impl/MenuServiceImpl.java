@@ -2,21 +2,22 @@ package com.wiggin.mangersys.service.impl;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.apache.commons.collections.CollectionUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.fasterxml.jackson.databind.util.BeanUtil;
 import com.google.common.collect.Lists;
+import com.wiggin.mangersys.config.CustomException;
+import com.wiggin.mangersys.config.ExceptionCodeEnum;
 import com.wiggin.mangersys.domain.entity.Menu;
 import com.wiggin.mangersys.domain.mapper.MenuMapper;
 import com.wiggin.mangersys.service.MenuService;
+import com.wiggin.mangersys.util.TreeUtil;
 import com.wiggin.mangersys.web.vo.request.MenuSaveRequest;
 import com.wiggin.mangersys.web.vo.response.MenuTreeResponse;
 
@@ -44,48 +45,12 @@ public class MenuServiceImpl implements MenuService {
         Wrapper<Menu> wrapper = new EntityWrapper<>();
         List<Menu> menuList = menuMapper.selectList(wrapper);
         log.info("menuList => {}", menuList);
-        Map<Integer, List<Menu>> menuMap = menuList.parallelStream().collect(Collectors.groupingBy(Menu::getParentId));
-        List<MenuTreeResponse> menuTrees = Lists.newArrayList();
-        List<Menu> parentMenuList = menuMap.get(0);
-        for (Menu menu : parentMenuList) {
-            MenuTreeResponse menuTreeResponse = new MenuTreeResponse();
-            BeanUtils.copyProperties(menu, menuTreeResponse);
-            /*if (menuMap.containsKey(menu.getId())) {
-                List<Menu> subMenuList = menuMap.get(menu.getId());
-                List<MenuTreeResponse> menuTreesTemp = Lists.newArrayList();
-                for (Menu subMenu : subMenuList) {
-                    MenuTreeResponse menuTreeResponseTemp = new MenuTreeResponse();
-                    BeanUtils.copyProperties(subMenu, menuTreeResponseTemp);
-                    menuTreesTemp.add(menuTreeResponseTemp);
-                }
-                menuTreeResponse.setChildren(menuTreesTemp);
-            }*/
-            if (menuMap.containsKey(menu.getId())) {
-                menuTreeResponse.setChildren(getMenuChild(parentMenuList, menuMap));
-            }
-            menuTrees.add(menuTreeResponse);
+        if (CollectionUtils.isEmpty(menuList)) {
+        	throw new CustomException(ExceptionCodeEnum.MENU_EMPTY);
         }
+        List<MenuTreeResponse> menuTrees = TreeUtil.createTree(MenuTreeResponse.class, menuList, 0, Menu::getParentId);
         log.info("menuTrees => {}", menuTrees);
         return menuTrees;
-    }
-    
-    /**
-     * 
-     * @param menuList
-     * @param menuMap
-     * @return
-     */
-    private List<MenuTreeResponse> getMenuChild(List<Menu> menuList, Map<Integer, List<Menu>> menuMap) {
-        List<MenuTreeResponse> treeResponseList = Lists.newArrayList();
-        for (Menu menu : menuList) {
-            MenuTreeResponse menuTreeResponse = new MenuTreeResponse();
-            if (menuMap.containsKey(menu.getId())) {
-                List<MenuTreeResponse> menuChild = getMenuChild(menuMap.get(menu.getId()), menuMap);
-                menuTreeResponse.setChildren(menuChild);
-            }
-            treeResponseList.add(menuTreeResponse);
-        }
-        return treeResponseList;
     }
 
 

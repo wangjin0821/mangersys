@@ -3,11 +3,10 @@ package com.wiggin.mangersys.domain.entity;
 import java.io.Serializable;
 import java.util.Date;
 
-import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
-import com.baomidou.mybatisplus.enums.IdType;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.experimental.Accessors;
 
 /**
@@ -19,15 +18,13 @@ import lombok.experimental.Accessors;
  * @since 2019-01-17
  */
 @Data
+@EqualsAndHashCode(callSuper=false)
 @Accessors(chain = true)
 @TableName("api_roles")
-public class Roles implements Serializable {
+public class Roles extends TreeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-    private Integer parentId;
     /**
      * 角色名
      */

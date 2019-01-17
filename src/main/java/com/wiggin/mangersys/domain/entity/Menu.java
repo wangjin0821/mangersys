@@ -1,18 +1,14 @@
 package com.wiggin.mangersys.domain.entity;
 
-import com.baomidou.mybatisplus.enums.IdType;
-import java.util.Date;
-import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
 import java.io.Serializable;
+import java.util.Date;
 
-import com.baomidou.mybatisplus.annotations.Version;
+import com.baomidou.mybatisplus.annotations.TableName;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -23,16 +19,13 @@ import lombok.experimental.Accessors;
  * @since 2018-09-15
  */
 @Data
+@EqualsAndHashCode(callSuper = false)
 @TableName("api_menu")
 @AllArgsConstructor
 @NoArgsConstructor
-public class Menu implements Serializable {
+public class Menu extends TreeEntity implements Serializable {
 
     private static final long serialVersionUID = 1L;
-
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-    private Integer parentId;
     /**
      * 菜单名称
      */
