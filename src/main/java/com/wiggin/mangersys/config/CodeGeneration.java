@@ -71,7 +71,7 @@ public class CodeGeneration {
 		
 		String packageName = "com.wiggin.mangersys";
         boolean serviceNameStartWithI = false;//user -> UserService, 设置成true: user -> IUserService
-        generateByTables(serviceNameStartWithI, packageName, "api_product_picture", "api_product_stock");
+        generateByTables(serviceNameStartWithI, packageName, "api_roles", "api_user_roles", "api_role_permission");
 
 	}
 	
@@ -119,7 +119,7 @@ public class CodeGeneration {
  
         config.setActiveRecord(false) //是否 开启 ActiveRecord 模式
                 .setAuthor("wiggin")
-                .setOutputDir("F:\\autocode")
+                .setOutputDir("D:\\autocode")
                 .setFileOverride(true)
                 .setEnableCache(false)// XML 二级缓存
                 .setBaseResultMap(true)// XML ResultMap
@@ -156,7 +156,7 @@ public class CodeGeneration {
         focList.add(new FileOutConfig("/templates/mapper.xml.vm") {
             @Override
             public String outputFile(TableInfo tableInfo) {
-                return "F:\\autocode/resources/mapper/" + tableInfo.getEntityName() + ".xml";
+                return "D:\\autocode/resources/mapper/" + tableInfo.getEntityName() + ".xml";
             }
         });
         cfg.setFileOutConfigList(focList);

@@ -50,7 +50,7 @@ public class MenuServiceImpl implements MenuService {
         for (Menu menu : parentMenuList) {
             MenuTreeResponse menuTreeResponse = new MenuTreeResponse();
             BeanUtils.copyProperties(menu, menuTreeResponse);
-            if (menuMap.containsKey(menu.getId())) {
+            /*if (menuMap.containsKey(menu.getId())) {
                 List<Menu> subMenuList = menuMap.get(menu.getId());
                 List<MenuTreeResponse> menuTreesTemp = Lists.newArrayList();
                 for (Menu subMenu : subMenuList) {
@@ -59,11 +59,33 @@ public class MenuServiceImpl implements MenuService {
                     menuTreesTemp.add(menuTreeResponseTemp);
                 }
                 menuTreeResponse.setChildren(menuTreesTemp);
+            }*/
+            if (menuMap.containsKey(menu.getId())) {
+                menuTreeResponse.setChildren(getMenuChild(parentMenuList, menuMap));
             }
             menuTrees.add(menuTreeResponse);
         }
         log.info("menuTrees => {}", menuTrees);
         return menuTrees;
+    }
+    
+    /**
+     * 
+     * @param menuList
+     * @param menuMap
+     * @return
+     */
+    private List<MenuTreeResponse> getMenuChild(List<Menu> menuList, Map<Integer, List<Menu>> menuMap) {
+        List<MenuTreeResponse> treeResponseList = Lists.newArrayList();
+        for (Menu menu : menuList) {
+            MenuTreeResponse menuTreeResponse = new MenuTreeResponse();
+            if (menuMap.containsKey(menu.getId())) {
+                List<MenuTreeResponse> menuChild = getMenuChild(menuMap.get(menu.getId()), menuMap);
+                menuTreeResponse.setChildren(menuChild);
+            }
+            treeResponseList.add(menuTreeResponse);
+        }
+        return treeResponseList;
     }
 
 

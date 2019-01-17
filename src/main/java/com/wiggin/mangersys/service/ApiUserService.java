@@ -1,8 +1,11 @@
 package com.wiggin.mangersys.service;
 
+import java.util.List;
+
 import com.wiggin.mangersys.domain.entity.ApiUser;
 import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.web.vo.request.ApiUserPageRequest;
+import com.wiggin.mangersys.web.vo.request.UserSaveRequest;
 import com.wiggin.mangersys.web.vo.response.UserInfoResponse;
 
 /**
@@ -22,4 +25,8 @@ public interface ApiUserService {
 	String refreToken(Integer id);
 	
 	UserInfoResponse getInfo(String token);
+	
+	Integer saveUser(UserSaveRequest userReq);
+	
+	Integer deleteUser(List<Integer> ids);
 }

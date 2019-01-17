@@ -2,14 +2,14 @@ import request from '@/utils/request'
 
 export function getMenuList() {
   return request({
-    url: '/system/menu/list',
+    url: '/menu/list',
     method: 'get'
   })
 }
 
 export function deleteMenu(params) {
   return request({
-    url: '/system/menu/delete',
+    url: '/menu/delete',
     method: 'post',
     data: params
   })
@@ -17,7 +17,7 @@ export function deleteMenu(params) {
 
 export function saveMenu(params) {
   return request({
-    url: '/system/menu/save',
+    url: '/menu/save',
     method: 'post',
     data: params
   })
@@ -25,7 +25,7 @@ export function saveMenu(params) {
 
 export function updateMenu(params) {
   return request({
-    url: '/system/menu/update',
+    url: '/menu/update',
     method: 'post',
     data: params
   })
@@ -41,23 +41,15 @@ export function getUserList(params) {
 
 export function deleteUser(params) {
   return request({
-    url: '/system/user/delete',
+    url: '/user/delete',
     method: 'post',
     data: params
   })
 }
 
-export function addUser(params) {
+export function saveUser(params) {
   return request({
-    url: '/system/user/add',
-    method: 'post',
-    data: params
-  })
-}
-
-export function updateUser(params) {
-  return request({
-    url: '/system/user/update',
+    url: '/user/save',
     method: 'post',
     data: params
   })
@@ -65,7 +57,7 @@ export function updateUser(params) {
 
 export function updateUserRole(params) {
   return request({
-    url: '/system/user/updateRole',
+    url: '/user/updateRole',
     method: 'post',
     data: params
   })
@@ -73,7 +65,7 @@ export function updateUserRole(params) {
 
 export function getUserRoles(params) {
   return request({
-    url: '/system/user/roleList',
+    url: '/user/roleList',
     method: 'get',
     params
   })
@@ -81,7 +73,7 @@ export function getUserRoles(params) {
 
 export function getRoleList() {
   return request({
-    url: '/system/role/list',
+    url: '/role/list',
     method: 'get'
   })
 }

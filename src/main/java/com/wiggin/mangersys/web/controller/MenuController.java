@@ -26,7 +26,7 @@ import io.swagger.annotations.ApiOperation;
  * @since 2018-09-15
  */
 @RestController
-@RequestMapping("/system/menu")
+@RequestMapping("/menu")
 public class MenuController {
 
     @Autowired

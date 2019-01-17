@@ -1,6 +1,8 @@
 package com.wiggin.mangersys.web.controller;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,6 +15,8 @@ import com.wiggin.mangersys.domain.entity.ApiUser;
 import com.wiggin.mangersys.service.ApiUserService;
 import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.web.vo.request.ApiUserPageRequest;
+import com.wiggin.mangersys.web.vo.request.BatchIdRequest;
+import com.wiggin.mangersys.web.vo.request.UserSaveRequest;
 import com.wiggin.mangersys.web.vo.response.UserInfoResponse;
 
 import io.swagger.annotations.ApiOperation;
@@ -58,6 +62,18 @@ public class UserController {
 	public void logout() {
 	    
 	}
-
+	
+	
+	@PostMapping("/save")
+	public Integer update(@RequestBody UserSaveRequest userReq) {
+	    return apiUserService.saveUser(userReq);
+	}
+	
+	
+	@PostMapping("/delete")
+	public Integer delete(@RequestBody BatchIdRequest idsReq) {
+	    List<Integer> ids = idsReq.getIds();
+	    return apiUserService.deleteUser(ids);
+	}
 }
 

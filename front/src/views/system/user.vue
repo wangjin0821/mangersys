@@ -51,7 +51,7 @@
             <el-table-column
               label="状态">
               <template slot-scope="scope">
-                {{ scope.row.status===1 ? '已激活' : '未激活' }}
+                {{ scope.row.status==1 ? '已激活' : '未激活' }}
               </template>
             </el-table-column>
             <el-table-column label="操作" width="285">
@@ -165,7 +165,7 @@
 
 <script>
 import panel from '@/components/Panel'
-import { getUserList, deleteUser, addUser, updateUser, updateUserRole, getUserRoles, getRoleList } from '@/api/system'
+import { getUserList, deleteUser, saveUser, updateUserRole, getUserRoles, getRoleList } from '@/api/system'
 
 export default {
   components: {
@@ -240,10 +240,10 @@ export default {
       this.$refs.addForm.validate(valid => {
         if (valid) {
           this.saveLoading = true
-          addUser({ addUser: this.addForm }).then(res => {
+          saveUser(this.addForm).then(res => {
             this.saveLoading = false
             this.addVisible = false
-            this.$message(res.data.message)
+            this.$message(res.message)
             this.loadData()
           }).catch(error => {
             this.saveLoading = false
@@ -259,12 +259,13 @@ export default {
       this.$refs.editForm.validate(valid => {
         if (valid) {
           this.saveLoading = true
-          updateUser({ updateUser: this.editForm }).then(res => {
+          saveUser(this.editForm).then(res => {
             this.saveLoading = false
             this.editVisible = false
-            this.$message(res.data.message)
+            this.$message(res.message)
             this.loadData()
           }).catch(error => {
+            this.saveLoading = false
             this.$message.error(error)
           })
         } else {
@@ -322,15 +323,17 @@ export default {
       // })
     },
     handleDelete(index, row) {
-      deleteUser({ userIds: [row.id] }).then(res => {
-        if (res.data.status) {
-          this.$message(res.data.message)
+      this.$confirm('确定删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        deleteUser({ ids: [row.id] }).then(res => {
+          this.$message(res.message)
           this.loadData()
-        } else {
-          reject(res.data.message)
-        }
-      }).catch(error => {
-        this.$message.error(error)
+        }).catch(error => {
+          this.$message.error(error)
+        })
       })
     },
     loadData() {

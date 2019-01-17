@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +21,7 @@ import com.wiggin.mangersys.service.ApiUserService;
 import com.wiggin.mangersys.util.MD5;
 import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.web.vo.request.ApiUserPageRequest;
+import com.wiggin.mangersys.web.vo.request.UserSaveRequest;
 import com.wiggin.mangersys.web.vo.response.MenuResponse;
 import com.wiggin.mangersys.web.vo.response.UserInfoResponse;
 
@@ -49,7 +51,12 @@ public class ApiUserServiceImpl implements ApiUserService {
 		}
 		Wrapper<ApiUser> wrapper = new EntityWrapper<>(apiUser);
 		List<ApiUser> selectPage = apiUserMapper.selectPage(pagination, wrapper);
-		System.out.println(selectPage);
+		log.info("userList=>{}", selectPage);
+		for (ApiUser user : selectPage) {
+		    user.setPassWord(null);
+		    user.setToken(null);
+		    user.setTokenExpire(null);
+        }
 		return new Page<>(pagination.getTotal(), pagination.getPages(), selectPage);
 	}
 
@@ -193,6 +200,24 @@ public class ApiUserServiceImpl implements ApiUserService {
 		userInfoResponse.setMenuList(Lists.newArrayList(menuResponse, menuResponseSys, menuResponseProd));
 		return userInfoResponse;
 	}
+
+	
+    @Override
+    public Integer saveUser(UserSaveRequest userReq) {
+        ApiUser apiUser = new ApiUser();
+        BeanUtils.copyProperties(userReq, apiUser);
+        log.info("userReq =>{}, apiUser=>{}", userReq, apiUser);
+        if (apiUser.getId() != null && apiUser.getId() > 0) {
+            return apiUserMapper.updateById(apiUser);
+        } else {
+            return apiUserMapper.insert(apiUser);
+        }
+    }
+
+    @Override
+    public Integer deleteUser(List<Integer> ids) {
+        return apiUserMapper.deleteBatchIds(ids);
+    }
 	
 	
 
