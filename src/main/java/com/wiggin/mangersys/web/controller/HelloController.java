@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wiggin.mangersys.domain.entity.ApiUser;
 
-import lombok.extern.slf4j.Slf4j;
-
 @RestController
 @RequestMapping("/hello")
 public class HelloController {

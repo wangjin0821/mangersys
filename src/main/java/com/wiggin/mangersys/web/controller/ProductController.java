@@ -1,6 +1,7 @@
 package com.wiggin.mangersys.web.controller;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,9 +12,6 @@ import com.wiggin.mangersys.domain.entity.Product;
 import com.wiggin.mangersys.service.ProductService;
 import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.web.vo.request.ProductPageRequest;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 
 /**
  * <p>

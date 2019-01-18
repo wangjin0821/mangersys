@@ -10,8 +10,8 @@ import com.baomidou.mybatisplus.enums.IdType;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -22,7 +22,7 @@ import lombok.experimental.Accessors;
  * @since 2018-09-18
  */
 @Data
-@Accessors(chain = true)
+@EqualsAndHashCode(callSuper = false)
 @TableName("api_product")
 @AllArgsConstructor
 @NoArgsConstructor

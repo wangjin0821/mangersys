@@ -1,8 +1,8 @@
 <template>
   <imp-panel>
     <h3 class="box-title" slot="header" style="width: 100%;">
-      <el-button type="primary" icon="plus" @click="newAdd">新增</el-button>
-      <el-button type="danger" icon="delete" @click="batchDelete">删除</el-button>
+      <el-button type="primary" icon="plus" @click="newAdd" :loading="addBtnLoading">新增</el-button>
+      <el-button type="danger" icon="delete" @click="batchDelete" :loading="batchDelBtnLoading">删除</el-button>
     </h3>
     <el-row slot="body" :gutter="24" style="margin-bottom: 20px;">
       <el-col :span="6" :xs="24" :sm="24" :md="6" :lg="6" style="margin-bottom: 20px;">
@@ -12,7 +12,7 @@
                   show-checkbox
                   highlight-current
                   :render-content="renderContent"
-                  @node-click="handleNodeClick" clearable node-key="id" :props="defaultProps"></el-tree>
+                  @node-click="handleNodeClick" clearable node-key="id" :props="defaultProps" v-loading="treeLoading"></el-tree>
       </el-col>
       <el-col :span="18" :xs="24" :sm="24" :md="18" :lg="18">
         <el-card class="box-card">
@@ -25,29 +25,22 @@
                 </el-select-tree>
               </el-form-item>
               <el-form-item label="名称" :label-width="formLabelWidth">
-                <el-input v-model="form.name" auto-complete="off"></el-input>
+                <el-input v-model="form.roleName" auto-complete="off"></el-input>
               </el-form-item>
-              <el-form-item label="英文" :label-width="formLabelWidth">
-                <el-input v-model="form.enName" auto-complete="off"></el-input>
-              </el-form-item>
-              <el-form-item label="是否生效" :label-width="formLabelWidth">
-                <el-radio class="radio" v-model="form.usable" label="1">是</el-radio>
-                <el-radio class="radio" v-model="form.usable" label="0">否</el-radio>
-              </el-form-item>
-              <el-form-item label="排序" :label-width="formLabelWidth">
-                <el-slider v-model="form.sort"></el-slider>
+              <el-form-item label="角色编码" :label-width="formLabelWidth">
+                <el-input v-model="form.roleCode" auto-complete="off"></el-input>
               </el-form-item>
               <el-form-item label="" :label-width="formLabelWidth">
-                <el-button type="primary" @click="onSubmit" v-text="form.id?'修改':'新增'"></el-button>
-                <el-button type="info" @click="settingResource($event,form.id)" icon="setting" v-show="form.id && form.id!=null">配置资源
+                <el-button type="primary" @click="onSubmit" v-text="form.id?'修改':'新增'" :loading="submitLoading"></el-button>
+                <el-button type="info" @click="settingResource(form.id)" icon="setting" v-show="form.id && form.id!=null">配置资源
                 </el-button>
-                <el-button type="danger" @click="deleteSelected" icon="delete" v-show="form.id && form.id!=null">删除
+                <el-button type="danger" @click="deleteSelected" icon="delete" v-show="form.id && form.id!=null" :loading="delBtnLoading">删除
                 </el-button>
               </el-form-item>
             </el-form>
           </div>
         </el-card>
-        <el-dialog title="配置资源" v-model="dialogVisible" size="tiny">
+        <el-dialog title="配置资源" :visible.sync="dialogVisible" size="tiny">
           <div class="select-tree">
           <el-scrollbar
             tag="div"
@@ -58,10 +51,10 @@
             :data="resourceTree"
             ref="resourceTree"
             show-checkbox
-            check-strictly
+            default-expand-all
             node-key="id"
             v-loading="dialogLoading"
-            :props="defaultProps">
+            :props="resourceProps">
           </el-tree>
           </el-scrollbar>
           </div>
@@ -78,7 +71,7 @@
 import panel from '@/components/Panel'
 import selectTree from '@/components/SelectTree'
 import treeter from '@/utils/treeter'
-import { getRoleList } from '@/api/system'
+import { getRoleList, saveRole, deleteRoles, getMenuList, saveRolePermission, getListByRoleId } from '@/api/system'
 
 export default {
   mixins: [treeter],
@@ -88,10 +81,20 @@ export default {
   },
   data() {
     return {
+      addBtnLoading: false,
+      batchDelBtnLoading: false,
+      delBtnLoading: false,
+      submitLoading: false,
+      treeLoading: false,
       dialogLoading: false,
       dialogVisible: false,
       formLabelWidth: '100px',
       defaultProps: {
+        children: 'children',
+        label: 'roleName',
+        id: 'id'
+      },
+      resourceProps: {
         children: 'children',
         label: 'name',
         id: 'id'
@@ -100,18 +103,29 @@ export default {
       resourceTree: [],
       maxId: 700000,
       form: {
-        id: null,
-        parentId: null,
-        name: '',
-        enName: '',
-        sort: 0,
-        usable: '1'
+        id: 0,
+        parentId: 0,
+        roleName: '',
+        roleCode: ''
       }
     }
   },
   methods: {
     configRoleResources() {
-      // const checkedKeys = this.$refs.resourceTree.getCheckedKeys()
+      const checkedKeys = this.$refs.resourceTree.getCheckedKeys()
+      console.log(checkedKeys)
+      const params = []
+      checkedKeys.forEach(element => {
+        params.push({ roleId: this.form.id, resouceId: element, resouceType: 1 })
+      });
+      saveRolePermission(params).then(res => {
+        this.$message(res.message)
+        this.resourceTree = []
+        this.dialogVisible = false
+      }).catch(error => {
+        this.dialogVisible = false
+        this.$message.error(error)
+      })
       // this.$http.get(api.SYS_SET_ROLE_RESOURCE + "?roleId=" + this.form.id + "&resourceIds="+checkedKeys.join(','))
       //   .then(res => {
       //     this.$message('修改成功')
@@ -123,13 +137,10 @@ export default {
     },
     newAdd() {
       this.form = {
-        id: null,
-        parentId: null,
-        name: '',
-        enName: '',
-        sort: 0,
-        usable: '1',
-        remarks: ''
+        id: 0,
+        parentId: 0,
+        roleName: '',
+        roleCode: ''
       }
     },
     batchDelete() {
@@ -143,6 +154,15 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(() => {
+        this.batchDelBtnLoading = true
+        deleteRoles({ids: checkKeys}).then((res) => {
+          this.batchDelBtnLoading = false
+          this.$message(res.message)
+          this.load()
+        }).catch((error) => {
+          this.batchDelBtnLoading = false
+          this.$message.error(error)
+        })
         // this.$http.get(api.SYS_ROLE_DELETE + "?roleIds=" + checkKeys.join(','))
         //   .then(res => {
         //     this.$message('操作成功')
@@ -155,7 +175,21 @@ export default {
       })
     },
     onSubmit() {
-      this.form.parentId = this.form.parentId
+      this.$refs.form.validate(valid => {
+        if (valid) {
+          this.submitLoading = true
+          saveRole(this.form).then((res) => {
+            this.submitLoading = false
+            this.$message(res.message)
+            this.newAdd()
+            this.load()
+          }).catch((error) => {
+            this.submitLoading = false
+            this.$message.error(error)
+          })
+        }
+      })
+      // this.form.parentId = this.form.parentId
       // this.$http.post(api.SYS_ROLE_ADD, this.form)
       //   .then(res => {
       //     this.form.id = res.data.id
@@ -179,6 +213,21 @@ export default {
       // })
     },
     deleteSelected(id) {
+      this.$confirm('确定删除?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        this.delBtnLoading = true
+        deleteRoles({ids: id}).then((res) => {
+          this.delBtnLoading = false
+          this.$message(res.message)
+          this.load()
+        }).catch((error) => {
+          this.delBtnLoading = false
+          this.$message.error(error)
+        })
+      })
       // this.$http.get(api.SYS_ROLE_DELETE + "?roleIds=" + id)
       //   .then(res => {
       //     this.$message('操作成功')
@@ -191,10 +240,13 @@ export default {
       // })
     },
     load() {
+      this.treeLoading = true;
       getRoleList().then(res => {
+        this.treeLoading = false
         this.roleTree = []
-        this.roleTree.push(...res.data.list)
+        this.roleTree.push(...res.data)
       }).catch(error => {
+        this.treeLoading = false
         this.$message.error(error)
       })
     },
@@ -205,23 +257,54 @@ export default {
             <span>{node.label}</span>
           </span>
           <span class='render-content'>
-            <i class='fa fa-wrench' title='配置资源' on-click={(e) => this.settingResource(e, data.id)}></i>
+            <i class='fa fa-wrench' title='配置资源' on-click={(e) => this.settingResource(data.id)}></i>
             <i class='fa fa-trash' on-click={ () => this.deleteSelected(data.id) }></i>
           </span>
         </span>
       )
     },
-    settingResource(event, id) {
-        event.stopPropagation()
-        this.dialogVisible = true
-        if (this.resourceTree == null || this.resourceTree.length <= 0) {
-          this.dialogLoading = true
-          // sysApi.resourceList()
-          //   .then(res => {
-          //     this.dialogLoading = false
-          //     this.resourceTree = res
-          //   })
-        }
+    settingResource(id) {
+      this.dialogVisible = true
+      if (this.resourceTree == null || this.resourceTree.length <= 0) {
+        getMenuList().then(res => {
+          this.resourceTree.push(...res.data)
+          getListByRoleId({roleId: id}).then(res1 => {
+            if (res1.data.length > 0) {
+              const selectIds = []
+              res1.data.forEach(item => {
+                selectIds.push(item.id)
+              })
+              console.log(selectIds)
+              this.$refs.resourceTree.setCheckedKeys(selectIds)
+            }
+          }).catch(error1 => {
+            this.dialogLoading = false
+            this.$message.error(error1)
+          })
+        }).catch(error => {
+          this.dialogLoading = false
+          this.$message.error(error)
+        })
+        // sysApi.resourceList()
+        //   .then(res => {
+        //     this.dialogLoading = false
+        //     this.resourceTree = res
+        //   })
+      } else {
+        getListByRoleId({roleId: id}).then(res => {
+          if (res.data.length > 0) {
+            const selectIds = []
+            res.data.forEach(item => {
+              selectIds.push(item.id)
+            })
+            console.log(selectIds)
+            this.$refs.resourceTree.setCheckedKeys(selectIds)
+          }
+        }).catch(error => {
+          this.dialogLoading = false
+          this.$message.error(error)
+        })
+      }
       // this.$http.get(api.SYS_ROLE_RESOURCE + "?id=" + id)
       //   .then(res => {
       //     this.$refs.resourceTree.setCheckedKeys(res.data)

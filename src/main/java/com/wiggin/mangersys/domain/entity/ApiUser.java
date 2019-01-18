@@ -3,6 +3,8 @@ package com.wiggin.mangersys.domain.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.hibernate.validator.constraints.NotEmpty;
+
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -35,7 +37,8 @@ public class ApiUser implements Serializable {
     /**
      * 用户名
      */
-    @ApiModelProperty("用戶名稱")
+	@NotEmpty(message = "用户名补不能为空")
+    @ApiModelProperty("用戶名称")
     private String userName;
     /**
      * 密码
@@ -45,6 +48,7 @@ public class ApiUser implements Serializable {
     /**
      * 姓名
      */
+    @NotEmpty(message = "姓名不能为空")
     @ApiModelProperty("姓名")
     private String name;
     /**

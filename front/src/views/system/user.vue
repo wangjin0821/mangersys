@@ -188,7 +188,7 @@ export default {
       saveLoading: false,
       defaultProps: {
         children: 'children',
-        label: 'name',
+        label: 'roleName',
         id: 'id'
       },
       roleTree: [],
@@ -286,20 +286,33 @@ export default {
         this.dialogLoading = true
         getRoleList().then(res => {
           this.dialogLoading = false
-          this.roleTree = res.data.list
+          this.roleTree = res.data
         })
       }
       getUserRoles({ userId: row.id }).then(res => {
-        this.$refs.roleTree.setCheckedKeys(res.data.list)
+        if (res.data.length > 0) {
+          const ids = []
+          res.data.forEach(data => {
+            ids.push(data.roleId)
+          })
+          this.$refs.roleTree.setCheckedKeys(ids)
+        }
       }).catch(error => {
         this.$message.error(error)
       })
     },
     configUserRoles() {
         const checkedKeys = this.$refs.roleTree.getCheckedKeys()
-        updateUserRole({ userId: this.currentRow.id, roleIds: checkedKeys }).then(res => {
+        if (checkedKeys.length < 0) {
+          this.$message.error('请选择需要设置的角色')
+        }
+        const params = []
+        checkedKeys.forEach(element => {
+          params.push({ userId: this.currentRow.id, roleId: element })
+        });
+        updateUserRole(params).then(res => {
           this.dialogVisible = false
-          this.$message(res.data.message)
+          this.$message(res.message)
         }).catch(error => {
           this.$message.error(error)
         })

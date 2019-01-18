@@ -1,6 +1,7 @@
 package com.wiggin.mangersys.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.wiggin.mangersys.web.vo.request.MenuSaveRequest;
 import com.wiggin.mangersys.web.vo.response.MenuTreeResponse;
@@ -20,4 +21,6 @@ public interface MenuService {
     Integer saveMenu(MenuSaveRequest menuReq);
     
     Integer deleteMenu(List<Integer> menuIds);
+    
+    Set<Integer> getAllParentListByIds(List<Integer> idList);
 }

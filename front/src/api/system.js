@@ -57,7 +57,7 @@ export function saveUser(params) {
 
 export function updateUserRole(params) {
   return request({
-    url: '/user/updateRole',
+    url: '/userRoles/save',
     method: 'post',
     data: params
   })
@@ -65,15 +65,47 @@ export function updateUserRole(params) {
 
 export function getUserRoles(params) {
   return request({
-    url: '/user/roleList',
-    method: 'get',
+    url: '/userRoles/list',
+    method: 'post',
     params
   })
 }
 
 export function getRoleList() {
   return request({
-    url: '/role/list',
+    url: '/role/tree',
     method: 'get'
+  })
+}
+
+export function saveRole(params) {
+  return request({
+    url: 'role/save',
+    method: 'post',
+    data: params
+  })
+}
+
+export function deleteRoles(params) {
+  return request({
+    url: 'role/delete',
+    method: 'post',
+    data: params
+  })
+}
+
+export function saveRolePermission(params) {
+  return request({
+    url: '/rolePermission/save',
+    method: 'post',
+    data: params
+  })
+}
+
+export function getListByRoleId(params) {
+  return request({
+    url: '/rolePermission/getListByRoleId',
+    method: 'post',
+    params
   })
 }

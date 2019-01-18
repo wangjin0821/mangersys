@@ -1,19 +1,17 @@
 package com.wiggin.mangersys.service.impl;
 
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 import org.apache.commons.collections.CollectionUtils;
+import org.assertj.core.util.Lists;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.google.common.collect.Lists;
-import com.wiggin.mangersys.config.CustomException;
-import com.wiggin.mangersys.config.ExceptionCodeEnum;
+import com.google.common.collect.Sets;
 import com.wiggin.mangersys.domain.entity.Menu;
 import com.wiggin.mangersys.domain.mapper.MenuMapper;
 import com.wiggin.mangersys.service.MenuService;
@@ -46,9 +44,15 @@ public class MenuServiceImpl implements MenuService {
         List<Menu> menuList = menuMapper.selectList(wrapper);
         log.info("menuList => {}", menuList);
         if (CollectionUtils.isEmpty(menuList)) {
-        	throw new CustomException(ExceptionCodeEnum.MENU_EMPTY);
+            return Lists.emptyList();
         }
-        List<MenuTreeResponse> menuTrees = TreeUtil.createTree(MenuTreeResponse.class, menuList, 0, Menu::getParentId);
+        List<MenuTreeResponse> menuTrees = TreeUtil.createTree(MenuTreeResponse.class, menuList, 0, Menu::getParentId, menu -> (menu.getId()),
+            (MenuTreeResponse menuResponse, List<MenuTreeResponse> menuResponseList) -> {
+                menuResponse.setChildren(menuResponseList);
+            });
+        // List<MenuTreeResponse> menuTrees =
+        // TreeUtil.createTree(MenuTreeResponse.class, menuList, 0,
+        // Menu::getParentId);
         log.info("menuTrees => {}", menuTrees);
         return menuTrees;
     }
@@ -63,13 +67,48 @@ public class MenuServiceImpl implements MenuService {
         } else {
             return menuMapper.insert(entity);
         }
-        
+
     }
 
 
     @Override
     public Integer deleteMenu(List<Integer> menuIds) {
         return menuMapper.deleteBatchIds(menuIds);
+    }
+
+
+    @Override
+    public Set<Integer> getAllParentListByIds(List<Integer> idList) {
+        if (CollectionUtils.isEmpty(idList)) {
+            return Sets.newConcurrentHashSet();
+        }
+        return getParentListByIds(Sets.newConcurrentHashSet(idList));
+    }
+    
+    
+    /**
+     * 
+     * @param idList
+     * @return
+     */
+    private Set<Integer> getParentListByIds(Set<Integer> idList) {
+        Set<Integer> menuIds = Sets.newConcurrentHashSet();
+        if (CollectionUtils.isEmpty(idList)) {
+            return menuIds;
+        }
+        List<Menu> menuList = menuMapper.selectBatchIds(idList);
+        if (CollectionUtils.isEmpty(menuList)) {
+            return menuIds;
+        }
+        Set<Integer> parentIds = Sets.newConcurrentHashSet();
+        for (Menu menu : menuList) {
+            menuIds.add(menu.getId());
+            if (!new Integer(0).equals(menu.getParentId())) {
+                parentIds.add(menu.getParentId());
+            }
+        }
+        menuIds.addAll(getParentListByIds(parentIds));
+        return menuIds;
     }
 
 }

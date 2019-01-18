@@ -1,9 +1,17 @@
 package com.wiggin.mangersys.web.controller;
 
 
-import org.springframework.stereotype.Controller;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.wiggin.mangersys.domain.entity.RolePermission;
+import com.wiggin.mangersys.service.RolePermissionService;
 
 /**
  * <p>
@@ -16,6 +24,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/rolePermission")
 public class RolePermissionController {
-
+    
+    @Autowired
+    private RolePermissionService rolePermissionService;
+        
+    @PostMapping("/save")
+    public Integer save(@RequestBody List<RolePermission> rolePermissionList) {
+        return rolePermissionService.saveRolePermission(rolePermissionList);
+    }
+    
+    
+    @PostMapping("/getListByRoleId")
+    public List<RolePermission> getListByRoleId(@RequestParam("roleId") Integer roleId) {
+        return rolePermissionService.getRolePermissionListByRoleId(roleId);
+    }
 }
 

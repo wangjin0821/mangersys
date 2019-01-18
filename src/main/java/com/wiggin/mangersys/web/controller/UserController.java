@@ -65,7 +65,7 @@ public class UserController {
 	
 	
 	@PostMapping("/save")
-	public Integer update(@RequestBody UserSaveRequest userReq) {
+	public Integer save(@RequestBody UserSaveRequest userReq) {
 	    return apiUserService.saveUser(userReq);
 	}
 	

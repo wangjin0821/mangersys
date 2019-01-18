@@ -1,7 +1,7 @@
 <template>
   <imp-panel>
     <h3 class="box-title" slot="header" style="width: 100%;">
-      <el-button type="primary" icon="plus" @click="newAdd" :liading="newLoading">新增</el-button>
+      <el-button type="primary" icon="plus" @click="newAdd" :loading="newLoading">新增</el-button>
       <el-button type="danger" icon="delete" @click="batchDelete" :loading="batchDelLoading">删除</el-button>
     </h3>
     <el-row slot="body" :gutter="24" style="margin-bottom: 20px;">

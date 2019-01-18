@@ -1,6 +1,7 @@
 package com.wiggin.mangersys.web.vo.response;
 
 import java.io.Serializable;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,12 +13,14 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = false)
 @AllArgsConstructor
 @NoArgsConstructor
-public class MenuTreeResponse extends TreeBaseResponse implements Serializable {
+public class MenuTreeResponse implements Serializable {
 
     /**
      * 
      */
     private static final long serialVersionUID = -3202672141541218001L;
+    private Integer id;
+    private Integer parentId;
     /**
      * 菜单名称
      */
@@ -38,4 +41,9 @@ public class MenuTreeResponse extends TreeBaseResponse implements Serializable {
      * 是否显示
      */
     private String isShow;
+
+    /**
+     * 子节点
+     */
+    private List<MenuTreeResponse> children;
 }
