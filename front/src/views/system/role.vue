@@ -272,7 +272,7 @@ export default {
             if (res1.data.length > 0) {
               const selectIds = []
               res1.data.forEach(item => {
-                selectIds.push(item.id)
+                selectIds.push(item.resouceId)
               })
               console.log(selectIds)
               this.$refs.resourceTree.setCheckedKeys(selectIds)
@@ -295,7 +295,7 @@ export default {
           if (res.data.length > 0) {
             const selectIds = []
             res.data.forEach(item => {
-              selectIds.push(item.id)
+              selectIds.push(item.resouceId)
             })
             console.log(selectIds)
             this.$refs.resourceTree.setCheckedKeys(selectIds)

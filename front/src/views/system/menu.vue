@@ -634,6 +634,7 @@ export default {
           saveMenu(this.form).then((res) => {
             this.addLoading = false
             this.$message(res.message)
+            this.newAdd()
             this.load()
           }).catch((error) => {
             this.addLoading = false
