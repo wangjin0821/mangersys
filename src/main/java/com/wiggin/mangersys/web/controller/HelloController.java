@@ -10,7 +10,7 @@ import com.wiggin.mangersys.domain.entity.ApiUser;
 @RestController
 @RequestMapping("/hello")
 public class HelloController {
-	
+		
 	@GetMapping("/index")
 	public String hello() {
 		return "Hello, index!!!";

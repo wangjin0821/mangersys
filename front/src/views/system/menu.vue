@@ -11,6 +11,7 @@
                   :data="menuTree"
                   show-checkbox
                   highlight-current
+                  default-expand-all
                   :render-content="renderContent"
                   @node-click="handleNodeClick" clearable node-key="id" :props="defaultProps" v-loading="menuLoading"></el-tree>
       </el-col>
@@ -21,7 +22,7 @@
               <el-form-item label="父级" :label-width="formLabelWidth">
                 <!--<el-input v-model="form.parentId" auto-complete="off"></el-input>-->
                 <el-select-tree v-model="form.parentId" :treeData="menuTree" :propNames="defaultProps" clearable
-                                placeholder="请选择父级">
+                 :handleTreeNodeClickCallback="selectParentAdd" placeholder="请选择父级">
                 </el-select-tree>
               </el-form-item>
               <el-form-item label="名称" :label-width="formLabelWidth">
@@ -590,6 +591,14 @@ export default {
         parentId: null,
         desc: ''
       }
+    },
+    selectParentAdd() {
+      this.form.id = 0
+      this.form.name = ''
+      this.form.sort = 0
+      this.form.icon = ''
+      this.form.path = ''
+      this.form.isShow = '1'
     },
     deleteSelected() {
       this.delLoading = true

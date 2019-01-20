@@ -41,4 +41,11 @@ pagehelper:
  #logging:
   #level:
     #com.wiggin.mangersys.domain.mapper: trace # 改成你的mapper文件所在包路径
+    
+#ecangAPI相关配置
+eccang:
+  userName: 1371
+  userPass: QWE123
+  apiService: http://kaner.eccang.com
+  pageSize: 1000
  

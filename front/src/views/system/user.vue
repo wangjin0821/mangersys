@@ -99,7 +99,7 @@
               ref="roleTree"
               :data="roleTree"
               show-checkbox
-              check-strictly
+              default-expand-all
               node-key="id" v-loading="dialogLoading"
               :props="defaultProps">
             </el-tree>

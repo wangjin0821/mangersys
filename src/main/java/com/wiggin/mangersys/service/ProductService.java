@@ -20,4 +20,6 @@ public interface ProductService {
 	
 	Integer deleteProduct(Integer id);
 	
+	Integer syncProductList();
+	
 }

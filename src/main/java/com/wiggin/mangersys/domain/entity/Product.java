@@ -28,48 +28,78 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Product extends BaseEntity implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @TableId(value = "id", type = IdType.AUTO)
-    private Integer id;
-    /**
-     * sku
-     */
-    private String sku;
-    /**
-     * 名称
-     */
-    private String cnName;
-    /**
-     * 重量
-     */
-    private BigDecimal weight;
-    /**
-     * 价格
-     */
-    private BigDecimal price;
-    /**
-     * 供应商名称
-     */
-    private String supplierName;
-    
-    /**
-     * 供应商产品详情链接
-     */
-    private String skuLink;
-    
-    private Date createTime;
-    
-    
-    private Date updateTime;
-    
-    /**
-     * 销量
-     */
-    private Integer salesVolume;
+	@TableId(value = "id", type = IdType.AUTO)
+	private Integer id;
 
-    /**
-     * 是否删除
-     */
-//    private Integer isDeleted;
+	/**
+	 * sku
+	 */
+	private String productSku;
+
+	/**
+	 * 产品重量
+	 */
+	private BigDecimal productWeight;
+
+	/**
+	 * 净重
+	 */
+	private BigDecimal productNetWeight;
+
+	/**
+	 * 供应商code
+	 */
+	private String defaultSupplierCode;
+
+	/**
+	 * 销售状态
+	 */
+	private Integer saleStatus;
+
+	/**
+	 * 长度
+	 */
+	private BigDecimal productLength;
+	/**
+	 * 宽度
+	 */
+	private BigDecimal productWidth;
+	/**
+	 * 高度
+	 */
+	private BigDecimal productHeight;
+
+	/**
+	 * 产品相关人员信息
+	 */
+	private Integer designerId;
+	private Integer personOpraterId;
+	private Integer personSellerId;
+	private Integer personDevelopId;
+
+	/**
+	 * 产品添加时间
+	 */
+	private Date productAddTime;
+
+	/**
+	 * 产品更新时间
+	 */
+	private Date productUpdateTime;
+
+	private Integer procutCategoryCode1;
+	private String procutCategoryName1;
+	private Integer procutCategoryCode2;
+	private String procutCategoryName2;
+	
+	/**
+	 * 供应商产品单价
+	 */
+	private BigDecimal spUnitPrice;
+	/**
+	 * 供应商价格币种币种
+	 */
+	private String spCurrencyCode;
 }

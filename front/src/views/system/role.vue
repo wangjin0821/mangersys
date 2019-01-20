@@ -11,6 +11,7 @@
                   ref="roleTree"
                   show-checkbox
                   highlight-current
+                  default-expand-all
                   :render-content="renderContent"
                   @node-click="handleNodeClick" clearable node-key="id" :props="defaultProps" v-loading="treeLoading"></el-tree>
       </el-col>
@@ -21,7 +22,7 @@
               <el-form-item label="父级" :label-width="formLabelWidth">
                 <!--<el-input v-model="form.parentId" auto-complete="off"></el-input>-->
                 <el-select-tree v-model="form.parentId" :treeData="roleTree" :propNames="defaultProps" clearable
-                                placeholder="请选择父级">
+                 :handleTreeNodeClickCallback="selectParentAdd" placeholder="请选择父级">
                 </el-select-tree>
               </el-form-item>
               <el-form-item label="名称" :label-width="formLabelWidth">
@@ -142,6 +143,11 @@ export default {
         roleName: '',
         roleCode: ''
       }
+    },
+    selectParentAdd() {
+      this.form.id = 0
+      this.form.roleName = ''
+      this.form.roleCode = ''
     },
     batchDelete() {
       const checkKeys = this.$refs.roleTree.getCheckedKeys()

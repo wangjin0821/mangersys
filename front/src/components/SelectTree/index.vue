@@ -130,6 +130,12 @@ export default {
       default() {
         return t('el.select.placeholder')
       }
+    },
+    handleTreeNodeClickCallback: {
+      type: Function,
+      default: function() {
+        return
+      }
     }
   },
   data() {
@@ -266,6 +272,7 @@ export default {
       this.selectedLabel = nodeData[this.propNames.label]
       this.selected = nodeData
       this.handleResize()
+      this.handleTreeNodeClickCallback()
     },
     handleCheckChange(data, checked, indeterminate) {
       if (!this.multiple) return
