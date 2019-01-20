@@ -88,6 +88,7 @@ public class ProductServiceImpl implements ProductService {
 		List<EccangProductResponse> productList = productPage.getList();
 		returnCount += saveEccangProductList(productList);
 		for(int i = 2; i <= pages; i++) {
+			productReq.setPage(i);
 			Page<EccangProductResponse> productPageTemp = eccangApi.getProductList(productReq);
 			if (productPage == null) {
 				return returnCount;
@@ -113,6 +114,8 @@ public class ProductServiceImpl implements ProductService {
 			Product product = new Product();
 			Product productEntity = new Product();
 			BeanUtils.copyProperties(eccangProductResponse, product);
+			product.setSpUnitPrice(eccangProductResponse.getSp_unit_price());
+			product.setSpCurrencyCode(eccangProductResponse.getCurrency_code());
 			productEntity.setProductSku(product.getProductSku());
 			Product selectOne = productMapper.selectOne(productEntity);
 			Integer productId = null;
