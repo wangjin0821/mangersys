@@ -13,6 +13,7 @@ import com.wiggin.mangersys.domain.entity.Product;
 import com.wiggin.mangersys.service.ProductService;
 import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.web.vo.request.ProductPageRequest;
+import com.wiggin.mangersys.web.vo.response.ProductPageResponse;
 
 /**
  * <p>
@@ -30,7 +31,7 @@ public class ProductController {
 	private ProductService productService;
 	
 	@PostMapping("/list")
-	public Page<Product> getProductList(@RequestBody ProductPageRequest productReq) {
+	public Page<ProductPageResponse> getProductList(@RequestBody ProductPageRequest productReq) {
 		return productService.getProductList(productReq);
 	}
 	

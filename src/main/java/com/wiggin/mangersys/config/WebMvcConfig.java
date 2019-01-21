@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.web.HttpMessageConverters;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
@@ -47,16 +48,31 @@ public class WebMvcConfig extends WebMvcConfigurerAdapter {
            // Date的日期转换器
            SerializerFeature.WriteDateUseDateFormat,
            // 循环引用
-           SerializerFeature.DisableCircularReferenceDetect
-        };
+           SerializerFeature.DisableCircularReferenceDetect };
 
         fastJsonConfig.setSerializerFeatures(serializerFeatures);
         fastJsonConfig.setCharset(Charset.forName("UTF-8"));
 
         // 3. 在converter中添加配置信息
         fastJsonHttpMessageConverter.setFastJsonConfig(fastJsonConfig);
-        
+
         HttpMessageConverter<?> converter = fastJsonHttpMessageConverter;
         return new HttpMessageConverters(converter);
+    }
+
+
+    @Bean(name = "threadPoolTaskExecutor")
+    public ThreadPoolTaskExecutor threadPoolTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        // 核心线程池数
+        executor.setCorePoolSize(10);
+        // 最大线程
+        executor.setMaxPoolSize(20);
+        // 队列容量
+        executor.setQueueCapacity(10);
+        // 队列满，线程被拒绝执行策略
+        executor.setRejectedExecutionHandler(new java.util.concurrent.ThreadPoolExecutor.CallerRunsPolicy());
+        
+        return executor;
     }
 }

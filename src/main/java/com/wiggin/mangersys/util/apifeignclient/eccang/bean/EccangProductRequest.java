@@ -13,11 +13,11 @@ public class EccangProductRequest {
 	private String productTitle;
 	private String productTitleLike;
 	
-	private Date productAddTimeFrom;
-	private Date productAddTimeTo;
+	private String productAddTimeFrom;
+	private String productAddTimeTo;
 	
-	private Date productUpdateTimeFrom;
-	private Date productUpdateTimeTo;
+	private String productUpdateTimeFrom;
+	private String productUpdateTimeTo;
 	
 	private Integer isCombination;
 	private Integer getProductCombination;
