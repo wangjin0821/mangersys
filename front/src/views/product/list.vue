@@ -4,7 +4,7 @@
         <h3 class="box-title" slot="header" style="width: 100%;">
           <el-row style="width: 100%;">
             <el-col :span="12">
-              <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button>
+              <!-- <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button> -->
               <!-- <router-link :to="{ path: 'userAdd'}">
                 
               </router-link> -->
