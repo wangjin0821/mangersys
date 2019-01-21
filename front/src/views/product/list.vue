@@ -37,32 +37,32 @@
               </template>
             </el-table-column>
             <el-table-column
-              prop="sku"
+              prop="productSku"
               label="SKU">
             </el-table-column>
             <el-table-column
-              prop="cnName"
+              prop="productTitle"
               label="产品名称">
             </el-table-column>
             <el-table-column
-              prop="weight"
+              prop="productWeight"
               label="重量">
             </el-table-column>
             <el-table-column
-              prop="price"
-              label="价格">
+              prop="defaultSupplierCode"
+              label="供应商Code">
             </el-table-column>
             <el-table-column
-              prop="supplierName"
-              label="供应商名称">
+              prop="spUnitPrice"
+              label="供应商价格">
             </el-table-column>
             <el-table-column
-              prop="skuLink"
-              label="供应商产品详情链接">
+              prop="spCurrencyCode"
+              label="供应商价格币种">
             </el-table-column>
             <el-table-column
-              prop="salesVolume"
-              label="销量">
+              prop="productAddTime"
+              label="产品添加时间">
             </el-table-column>
             <el-table-column label="操作" width="285">
               <template slot-scope="scope">

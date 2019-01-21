@@ -44,16 +44,17 @@ public class EccangApi {
 	public Page<EccangProductResponse> getProductList(EccangProductRequest productReq) {
 		productReq.setPageSize(pageSize);
 		Object json = JSON.toJSON(productReq);
-		log.info("json.toString()=>{}", json.toString());
+		log.info("productReq=>{}", json.toString());
 		String sendRequest = this.sendRequest("getProductList", json.toString());
 		JSONObject parseObject = JSON.parseObject(sendRequest);
 		Integer code = parseObject.getInteger("code");
 		if (new Integer(200).equals(code)) {
 			Integer totalCount = parseObject.getInteger("totalCount");
+			Integer page = parseObject.getInteger("page");
 			String message = parseObject.getString("message");
 			String dataJsonStr = parseObject.getString("data");
 			List<EccangProductResponse> eccangProductList = JSONObject.parseArray(dataJsonStr, EccangProductResponse.class);
-			log.info("dataJsonStr=>{}, size=>{}", dataJsonStr, eccangProductList.size());
+			log.info("totalCount=>{}, message={}, currentPage=>{}, size=>{}", totalCount, message, page, eccangProductList.size());
 			return new Page<>(totalCount, 0, eccangProductList);
 		}
 		return null;
@@ -70,9 +71,9 @@ public class EccangApi {
 		EccangClient client = Feign.builder()
 				.target(EccangClient.class, apiService);
 		String response = client.sendRequest(userName, userPass, serviceName, paramsJson);
-		log.info("response=>{}", response);
+		//log.info("response=>{}", response);
 		String parseSoapResponse = parseSoapResponse(response);
-		log.info("parseSoapResponse=>{}", parseSoapResponse);
+		//log.info("parseSoapResponse=>{}", parseSoapResponse);
 		return parseSoapResponse;
 	}
 	

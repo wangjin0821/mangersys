@@ -3,6 +3,7 @@ package com.wiggin.mangersys.service;
 import com.wiggin.mangersys.domain.entity.Product;
 import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.web.vo.request.ProductPageRequest;
+import com.wiggin.mangersys.web.vo.response.ProductPageResponse;
 
 /**
  * <p>
@@ -14,7 +15,7 @@ import com.wiggin.mangersys.web.vo.request.ProductPageRequest;
  */
 public interface ProductService {
 	
-	Page<Product> getProductList(ProductPageRequest productReq);
+	Page<ProductPageResponse> getProductList(ProductPageRequest productReq);
 	
 	Integer saveProduct(Product product);
 	
