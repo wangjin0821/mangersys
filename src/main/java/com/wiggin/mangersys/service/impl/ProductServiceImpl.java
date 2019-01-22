@@ -28,6 +28,7 @@ import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.util.apifeignclient.eccang.EccangApi;
 import com.wiggin.mangersys.util.apifeignclient.eccang.bean.EccangProductRequest;
 import com.wiggin.mangersys.util.apifeignclient.eccang.bean.EccangProductResponse;
+import com.wiggin.mangersys.util.report.BaseExport;
 import com.wiggin.mangersys.web.vo.request.ProductPageRequest;
 import com.wiggin.mangersys.web.vo.response.ProductPageResponse;
 
@@ -44,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements ProductService, BaseExport {
 
     @Autowired
     private ProductMapper productMapper;
@@ -164,7 +165,7 @@ public class ProductServiceImpl implements ProductService {
             log.info("eccangProductList.size=>{}", eccangProductList.size());
 
             // 多线程插入数据
-            threadPoolTaskExecutor.submit(new Runnable() {
+            threadPoolTaskExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
                     for (EccangProductResponse eccangProductResponse : eccangProductList) {
@@ -204,5 +205,12 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         return returnCount;
+    }
+
+
+    @Override
+    public Page<?> getExportList(Map<String, Object> parameter) {
+        ProductPageRequest productReq = BeanUtil.deepCopy(parameter, ProductPageRequest.class);
+        return getProductList(productReq);
     }
 }
