@@ -22,11 +22,13 @@ import com.wiggin.mangersys.domain.entity.ProductDesc;
 import com.wiggin.mangersys.domain.mapper.ProductDescMapper;
 import com.wiggin.mangersys.domain.mapper.ProductMapper;
 import com.wiggin.mangersys.service.ProductService;
+import com.wiggin.mangersys.util.BeanUtil;
 import com.wiggin.mangersys.util.DateUtil;
 import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.util.apifeignclient.eccang.EccangApi;
 import com.wiggin.mangersys.util.apifeignclient.eccang.bean.EccangProductRequest;
 import com.wiggin.mangersys.util.apifeignclient.eccang.bean.EccangProductResponse;
+import com.wiggin.mangersys.util.report.BaseExport;
 import com.wiggin.mangersys.web.vo.request.ProductPageRequest;
 import com.wiggin.mangersys.web.vo.response.ProductPageResponse;
 
@@ -43,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Service
 @Slf4j
-public class ProductServiceImpl implements ProductService {
+public class ProductServiceImpl implements ProductService, BaseExport {
 
     @Autowired
     private ProductMapper productMapper;
@@ -203,5 +205,12 @@ public class ProductServiceImpl implements ProductService {
             });
         }
         return returnCount;
+    }
+
+
+    @Override
+    public Page<?> getExportList(Map<String, Object> parameter) {
+        ProductPageRequest productReq = BeanUtil.deepCopy(parameter, ProductPageRequest.class);
+        return getProductList(productReq);
     }
 }

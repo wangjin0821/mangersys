@@ -17,6 +17,8 @@ import org.springframework.util.CollectionUtils;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.toolkit.IdWorker;
 import com.google.common.collect.Lists;
+import com.wiggin.mangersys.config.BusinessException;
+import com.wiggin.mangersys.config.ExceptionCodeEnum;
 import com.wiggin.mangersys.constant.FileTypeEnum;
 import com.wiggin.mangersys.util.report.vo.BaseExportVO;
 import com.wiggin.mangersys.util.report.vo.ExportVO;
@@ -72,8 +74,7 @@ public class BaseFileUtil {
 
                 exportWrite(baseExportVO, list, file, fieldType, exportVOs, sheetName);
             } catch (Exception e) {
-                // TODO wiggin
-//                throw new ServiceException(SysRespCodeEnum.PARAMS_ERR.code, "生成导出文件失败:" + e.getMessage(), e);
+                throw new BusinessException(ExceptionCodeEnum.EXPORT_DATA_ERROR_CODE.getCode(), "生成导出文件失败:" + e.getMessage());
             } finally {
                 file.deleteOnExit();
             }
@@ -176,13 +177,19 @@ public class BaseFileUtil {
                 exportWrite(baseExportVO, list, file, fieldType, exportVOs, sheetName);
             } catch (Exception e) {
                 file.delete();
-                  // TODO wiggin
-//                throw new ServiceException(SysRespCodeEnum.PARAMS_ERR.code, "生成导入失败文件时发生错误:" + e.getMessage(), e);
+                throw new BusinessException(ExceptionCodeEnum.EXPORT_DATA_ERROR_CODE.getCode(), "生成导入失败文件时发生错误:" + e.getMessage());
             }
         }
     }
 
-
+    
+    /**
+     * 
+     * @param zipFileName
+     * @param filePaths
+     * @return
+     * @throws Exception
+     */
     public static File zipFileName(String zipFileName, List<String> filePaths) throws Exception {
         List<File> files = Lists.newArrayListWithCapacity(filePaths.size());
 
@@ -194,7 +201,14 @@ public class BaseFileUtil {
         return zipFile(zipFileName, files);
     }
 
-
+    
+    /**
+     * 
+     * @param zipFileName
+     * @param files
+     * @return
+     * @throws Exception
+     */
     public static File zipFile(String zipFileName, List<File> files) throws Exception {
         if (!CollectionUtils.isEmpty(files)) {
             File zipFile = createFile(zipFileName);
@@ -223,8 +237,7 @@ public class BaseFileUtil {
                 return zipFile;
             } catch (IOException e) {
                 zipFile.deleteOnExit();
-                  //TODO wiggin
-//                throw new ServiceException(SysRespCodeEnum.PARAMS_ERR.code, "压缩文件失败:" + e.getMessage(), e);
+                throw new BusinessException(ExceptionCodeEnum.EXPORT_DATA_ERROR_CODE.getCode(), "压缩文件失败:" + e.getMessage());
             }
         }
 

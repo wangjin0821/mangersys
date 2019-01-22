@@ -21,9 +21,7 @@ public class BaseExportVO implements Serializable {
      */
     private static final long serialVersionUID = 1L;
 
-    @ApiModelProperty(value = "公司ID(不填默认取session,填上则会校验session的用户ID跟公司ID是否匹配)")
-    private Long companyId;
-
+    
     @ApiModelProperty(value = "导出文件名(不填默认为随机生成一个ID值)")
     private String fileName;
 
@@ -42,9 +40,6 @@ public class BaseExportVO implements Serializable {
 
     @ApiModelProperty(value = "导出文件格式 (1:XLS,2:XLSX,3:CSV,不传默认2,注:XLS格式最大导出行数为:65536)")
     private Integer fileType;
-
-    @ApiModelProperty(value = "系统ID(是否异步如果是是的话需要传入系统ID)")
-    private Long systemId;
 
     @ApiModelProperty(value = "是否异步(默认:false:同步,true:异步.如果false直接下载导出文件,true则是生成到我的下载中)")
     private boolean async;

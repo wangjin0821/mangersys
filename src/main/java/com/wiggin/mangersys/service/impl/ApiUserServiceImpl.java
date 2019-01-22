@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.mapper.Wrapper;
 import com.baomidou.mybatisplus.plugins.pagination.Pagination;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.wiggin.mangersys.config.CustomException;
+import com.wiggin.mangersys.config.BusinessException;
 import com.wiggin.mangersys.config.ExceptionCodeEnum;
 import com.wiggin.mangersys.domain.entity.ApiUser;
 import com.wiggin.mangersys.domain.mapper.ApiUserMapper;
@@ -66,7 +66,7 @@ public class ApiUserServiceImpl implements ApiUserService {
     @Override
     public ApiUser validateUserLogin(String userName, String passWord) {
         if (StringUtils.isAnyEmpty(userName, passWord)) {
-            throw new CustomException(ExceptionCodeEnum.USER_NAME_IS_NULL);
+            throw new BusinessException(ExceptionCodeEnum.USER_NAME_IS_NULL);
         }
         ApiUser entity = new ApiUser();
         entity.setUserName(userName);
@@ -74,7 +74,7 @@ public class ApiUserServiceImpl implements ApiUserService {
         log.info("ApiUser =>{}", entity);
         ApiUser selectOne = apiUserMapper.selectOne(entity);
         if (selectOne == null) {
-            throw new CustomException(ExceptionCodeEnum.USER_OR_PASS_IS_ERROR);
+            throw new BusinessException(ExceptionCodeEnum.USER_OR_PASS_IS_ERROR);
         }
         return selectOne;
     }
@@ -99,7 +99,7 @@ public class ApiUserServiceImpl implements ApiUserService {
         apiUser.setToken(token);
         ApiUser selectOne = apiUserMapper.selectOne(apiUser);
         if (selectOne == null) {
-            throw new CustomException(ExceptionCodeEnum.USER_TOKEN_NOT_FOUND);
+            throw new BusinessException(ExceptionCodeEnum.USER_TOKEN_NOT_FOUND);
         }
         UserInfoResponse userInfoResponse = new UserInfoResponse();
         userInfoResponse.setAvatar(selectOne.getAvater());

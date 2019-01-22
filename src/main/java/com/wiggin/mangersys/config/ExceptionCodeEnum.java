@@ -15,6 +15,9 @@ public enum ExceptionCodeEnum {
 	
 	USER_ROLE_IS_EMPTY(1005, "用户角色设置不能为空"),
 	
+	// 导出相关异常
+	EXPORT_DATA_ERROR_CODE(9001, ""),
+	
 	;
 	
 	private int code;

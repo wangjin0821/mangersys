@@ -32,6 +32,8 @@ import com.baomidou.mybatisplus.toolkit.IdWorker;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import com.wiggin.mangersys.config.BusinessException;
+import com.wiggin.mangersys.config.ExceptionCodeEnum;
 import com.wiggin.mangersys.config.ReportProperties;
 import com.wiggin.mangersys.constant.ExportAndImportEnum;
 import com.wiggin.mangersys.constant.FileTypeEnum;
@@ -70,8 +72,7 @@ public interface BaseExport {
     @GetMapping("/export")
     default void export(@Valid @ModelAttribute("baseExportVO") BaseExportVO baseExportVO) throws Exception {
         if (StringUtils.isBlank(StringUtils.substring(baseExportVO.getList(), 1, baseExportVO.getList().length() - 1))) {
-            //TODO wiggin
-            //throw new ServiceException(SysRespCodeEnum.PARAMS_ERR.code, "导出信息列不能为空");
+            throw new BusinessException(ExceptionCodeEnum.EXPORT_DATA_ERROR_CODE.getCode(), "导出列信息不能为空");
         }
 
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
@@ -83,7 +84,7 @@ public interface BaseExport {
         }
 
         if (baseExportVO.getFileType() == null) {
-            baseExportVO.setFileType(2);
+            baseExportVO.setFileType(FileTypeEnum.XLSX.getCode());
         }
 
         //Long companyId = null;
@@ -142,13 +143,11 @@ public interface BaseExport {
         try {
             exportVOs = BeanUtil.parseArray(baseExportVO.getList(), ExportVO.class);
         } catch (Exception e) {
-            //TODO wiggin
-            //throw new ServiceException(SysRespCodeEnum.PARAMS_ERR.code, "参数list错误,必须为:[{field:\"name\",title:\"名字\",columnSum:false}]格式,columnSum非必传!");
+            throw new BusinessException(ExceptionCodeEnum.EXPORT_DATA_ERROR_CODE.getCode(), "参数list错误,必须为:[{field:\"name\",title:\"名字\",columnSum:false}]格式,columnSum非必传!");
         }
 
         if (CollectionUtils.isEmpty(exportVOs)) {
-            //TODO wiggin
-            //throw new ServiceException(SysRespCodeEnum.PARAMS_ERR.code, "参数list不能为空!");
+            throw new BusinessException(ExceptionCodeEnum.EXPORT_DATA_ERROR_CODE.getCode(), "参数list不能为空!");
         }
 
         return getExportData(baseExportVO, exportVOs, token);
@@ -184,7 +183,6 @@ public interface BaseExport {
 
         Pagination pagination = new Pagination(1, 1);
         parameter.put("pagination", pagination);
-        //parameter.put("companyId", companyId);
 
         try {
             Page<?> page = getExportList(parameter);
@@ -223,7 +221,7 @@ public interface BaseExport {
                             j++;
                         } catch (Exception e) {
                             file.deleteOnExit();
-//                            throw new ServiceException(SysRespCodeEnum.PARAMS_ERR.code, e.getMessage(), e);
+                            throw new BusinessException(ExceptionCodeEnum.EXPORT_DATA_ERROR_CODE.getCode(), e.getMessage());
                         }
                     }
                 }
@@ -235,8 +233,7 @@ public interface BaseExport {
                 file = new File(path);
                 file.deleteOnExit();
             }
-            //TODO wiggin
-//            throw new ServiceException(SysRespCodeEnum.PARAMS_ERR.code, e.getMessage(), e);
+            throw new BusinessException(ExceptionCodeEnum.EXPORT_DATA_ERROR_CODE.getCode(), e.getMessage());
         }
 
         List<String> pathList = new ArrayList<>(filePaths);

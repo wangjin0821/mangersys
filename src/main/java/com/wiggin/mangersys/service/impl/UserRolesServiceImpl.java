@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.mapper.Wrapper;
-import com.wiggin.mangersys.config.CustomException;
+import com.wiggin.mangersys.config.BusinessException;
 import com.wiggin.mangersys.config.ExceptionCodeEnum;
 import com.wiggin.mangersys.domain.entity.UserRoles;
 import com.wiggin.mangersys.domain.mapper.UserRolesMapper;
@@ -54,7 +54,7 @@ public class UserRolesServiceImpl implements UserRolesService {
     @Transactional
     public Integer saveUserRoles(List<UserRoles> userRoleList) {
         if (CollectionUtils.isEmpty(userRoleList)) {
-            throw new CustomException(ExceptionCodeEnum.USER_ROLE_IS_EMPTY);
+            throw new BusinessException(ExceptionCodeEnum.USER_ROLE_IS_EMPTY);
         }
         log.info("userRoleList=>{}", userRoleList);
         Set<Integer> userIdSet = userRoleList.parallelStream().map(UserRoles::getUserId).collect(Collectors.toSet());
