@@ -12,7 +12,7 @@
             <el-col :span="12">
               <div class="el-input" style="width: 200px; float: right;">
                 <i class="el-input__icon el-icon-search"></i>
-                <input type="text" placeholder="输入用户名称" v-model="searchKey" @keyup.enter="search($event)"
+                <input type="text" placeholder="sku" v-model="searchKey" @keyup.enter="search($event)"
                         class="el-input__inner">
               </div>
             </el-col>
@@ -41,30 +41,46 @@
               label="SKU">
             </el-table-column>
             <el-table-column
-              prop="productTitle"
               label="产品名称">
+              <template slot-scope="scope">
+                <span>{{ scope.row.productTitle }}</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              prop="saleStatus"
+              label="销售状态">
             </el-table-column>
             <el-table-column
               prop="productWeight"
-              label="重量">
+              label="重量(KG)">
+            </el-table-column>
+            <el-table-column
+              label="尺寸(CM)">
+              <template slot-scope="scope">
+                <span>长:{{ scope.row.productLength }}cm 宽:{{ scope.row.productWidth }}cm 高:{{ scope.row.productHeight }}cm</span>
+              </template>
+            </el-table-column>
+            <el-table-column
+              label="品类">
+              <template slot-scope="scope">
+                <span>{{ scope.row.procutCategoryName1 }}/{{ scope.row.procutCategoryName2 }}</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="defaultSupplierCode"
               label="供应商Code">
             </el-table-column>
             <el-table-column
-              prop="spUnitPrice"
               label="供应商价格">
-            </el-table-column>
-            <el-table-column
-              prop="spCurrencyCode"
-              label="供应商价格币种">
+              <template slot-scope="scope">
+                <span>{{ scope.row.spUnitPrice }}{{ scope.row.spCurrencyCode }}</span>
+              </template>
             </el-table-column>
             <el-table-column
               prop="productAddTime"
-              label="产品添加时间">
+              label="产品开发时间">
             </el-table-column>
-            <el-table-column label="操作" width="285">
+            <!-- <el-table-column label="操作" width="285">
               <template slot-scope="scope">
                 <el-button
                   size="small"
@@ -78,7 +94,7 @@
                   @click="handleDelete(scope.$index, scope.row)">删除
                 </el-button>
               </template>
-            </el-table-column>
+            </el-table-column> -->
           </el-table>
     
           <el-pagination

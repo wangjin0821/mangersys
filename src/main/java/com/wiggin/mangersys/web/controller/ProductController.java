@@ -46,7 +46,7 @@ public class ProductController {
 	}
 	
 	
-	@GetMapping("syncProductList")
+	@GetMapping("/syncProductList")
 	public Integer syncProductList() {
 		return productService.syncProductList();
 	}
