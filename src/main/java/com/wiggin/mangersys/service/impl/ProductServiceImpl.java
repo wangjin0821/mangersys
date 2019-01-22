@@ -22,7 +22,6 @@ import com.wiggin.mangersys.domain.entity.ProductDesc;
 import com.wiggin.mangersys.domain.mapper.ProductDescMapper;
 import com.wiggin.mangersys.domain.mapper.ProductMapper;
 import com.wiggin.mangersys.service.ProductService;
-import com.wiggin.mangersys.util.BeanUtil;
 import com.wiggin.mangersys.util.DateUtil;
 import com.wiggin.mangersys.util.Page;
 import com.wiggin.mangersys.util.apifeignclient.eccang.EccangApi;
@@ -164,7 +163,7 @@ public class ProductServiceImpl implements ProductService {
             log.info("eccangProductList.size=>{}", eccangProductList.size());
 
             // 多线程插入数据
-            threadPoolTaskExecutor.submit(new Runnable() {
+            threadPoolTaskExecutor.execute(new Runnable() {
                 @Override
                 public void run() {
                     for (EccangProductResponse eccangProductResponse : eccangProductList) {
