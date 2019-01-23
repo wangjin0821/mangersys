@@ -1,10 +1,10 @@
 <template>
   <div>
     <imp-panel>
-        <h3 class="box-title" slot="header" style="width: 100%;">
+        <div class="box-title" slot="header" style="width: 100%;">
           <el-row style="width: 100%;">
             <el-col :span="12">
-              <!-- <el-button type="primary" icon="el-icon-plus" @click="handleAdd">新增</el-button> -->
+              <el-button type="primary" icon="el-icon-plus" @click="exportDialogVisible = true">导出</el-button>
               <!-- <router-link :to="{ path: 'userAdd'}">
                 
               </router-link> -->
@@ -17,7 +17,7 @@
               </div>
             </el-col>
           </el-row>
-        </h3>
+        </div>
         <div slot="body" v-loading="listLoading">
           <el-table
             :data="tableData.rows"
@@ -139,12 +139,36 @@
           <el-button type="primary" @click="addSave" :loading="saveLoading">保 存</el-button>
         </div>
       </el-dialog>
+      <el-dialog title="导出产品信息" width="15%" :visible.sync="exportDialogVisible">
+        <div>
+          <el-form ref="exportFromData" :model="exportFromData" :rules="formRules" :label-position="exportFromData.position">
+            <el-form-item label="选择导出字段">
+              <el-checkbox :indeterminate="exportFromData.isIndeterminate" v-model="exportFromData.checkAll">全选</el-checkbox>
+              <div style="margin: 15px 0;"></div>
+              <el-checkbox-group v-model="exportFromData.fields">
+                <el-checkbox v-for="(item) in exportFromData.fields" :label="item.field" :key="item.field">{{ item.label }}</el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
+            <el-form-item label="文件类型">
+              <el-radio-group v-model="exportFromData.fileType">
+                <el-radio label="XLS"></el-radio>
+                <el-radio label="XLSX"></el-radio>
+                <el-radio label="CSV"></el-radio>
+              </el-radio-group>
+            </el-form-item>
+          </el-form>
+        </div>
+        <div slot="footer" class="dialog-footer">
+          <el-button @click="exportDialogVisible = false">取 消</el-button>
+          <el-button type="primary" @click="handlExprot" :loading="saveLoading">导 出</el-button>
+        </div>
+      </el-dialog>
   </div>
 </template>
 
 <script>
 import panel from '@/components/Panel'
-import { getList, deleted, update, add } from '@/api/product'
+import { getList, deleted, update, add, downLoadMix } from '@/api/product'
 
 export default {
   components: {
@@ -163,6 +187,7 @@ export default {
       formVisible: false,
       saveLoading: false,
       listLoading: false,
+      exportDialogVisible: false,
       defaultProps: {
         children: 'children',
         label: 'name',
@@ -187,6 +212,19 @@ export default {
         supplierName: '',
         skuLink: '',
         salesVolume: 0
+      },
+      exportFromData: {
+        position: 'top',
+        checkAll: false,
+        isIndeterminate: true,
+        fields: [
+          { field: 'productSku', checked: false, label: 'SKU' },
+          { field: 'productTitle', checked: false, label: '名称' },
+          { field: 'productWeight', checked: false, label: '重量' },
+          { field: 'spUnitPrice', checked: false, label: '供应商价格' },
+          { field: 'spCurrencyCode', checked: false, label: '供应商价格币种' }
+        ],
+        fileType: 'XLS'
       },
       formRules: {
         sku: [{ required: true, trigger: 'blur' }],
@@ -244,6 +282,18 @@ export default {
     handleCurrentChange(val) {
       this.tableData.pagination.pageNo = val
       this.loadData()
+    },
+    handlExprot() {
+      console.log(this.exportFromData)
+      const exportFileList = []
+      exportFileList.push({ field: 'productSku', title: 'SKU' })
+      const listStr = JSON.stringify(exportFileList)
+      // { list: listStr, async: 'false', parameter: '{"sku": "A301020101"}' }
+      downLoadMix({ list1: listStr, async: 'false', parameter: '{"sku": "A30102010111ss"}' }).then(res => {
+        this.$message('下载成功')
+      }, reject => {
+        this.$message.error(reject)
+      })
     },
     handleAdd() {
       this.formData = {

@@ -46,6 +46,7 @@ import com.wiggin.mangersys.util.report.util.GenerateMyFileData;
 import com.wiggin.mangersys.util.report.vo.BaseExportVO;
 import com.wiggin.mangersys.util.report.vo.ExportVO;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 
@@ -55,6 +56,7 @@ import io.swagger.annotations.ApiOperation;
  * @author weiem
  * 
  */
+@Api
 public interface BaseExport {
 
     // 分页查询每页的条数
@@ -359,9 +361,12 @@ public interface BaseExport {
      */
     default public void setResponseHeader(HttpServletResponse response, String fileName) throws UnsupportedEncodingException {
         fileName = new String(fileName.getBytes(), "ISO8859-1");
-
+        
+        response.setHeader("Access-Control-Expose-Headers", "Content-Disposition,Ajax-Download,Ajax-Download-File");
         response.setContentType("application/octet-stream;charset=ISO8859-1");
         response.setHeader("Content-Disposition", "attachment;filename=" + fileName);
+        response.setHeader("Ajax-Download", "true");
+        response.setHeader("Ajax-Download-File", fileName);
         response.addHeader("Pargam", "no-cache");
         response.addHeader("Cache-Control", "no-cache");
         response.setCharacterEncoding("UTF-8");

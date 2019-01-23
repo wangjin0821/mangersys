@@ -10,6 +10,7 @@ import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -101,10 +102,21 @@ public class CustomControllerAdvice implements ResponseBodyAdvice<Object> {
      * @return
      */
     @ResponseBody
-    @ExceptionHandler(value = MethodArgumentNotValidException.class)
-    public GenericResponse validExceptionHandler(MethodArgumentNotValidException e) {
-        BindingResult bindingResult = e.getBindingResult();
-        log.error(e.toString());
+    @ExceptionHandler(value = {MethodArgumentNotValidException.class, BindException.class})
+    public GenericResponse validExceptionHandler(Exception e) {
+        BindingResult bindingResult = null;
+        try {
+            throw e;
+        } catch (BindException eb) {
+            bindingResult = eb.getBindingResult();
+        } catch (MethodArgumentNotValidException em) {
+            bindingResult = em.getBindingResult();
+        } catch (Exception ee) {
+            log.error(ee.toString());
+        }
+        if (bindingResult == null) {
+            return null;
+        }
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(ExceptionCodeEnum.PARAM_VALID_ERROR.getMessage());
         if (bindingResult != null && bindingResult.hasErrors()) {

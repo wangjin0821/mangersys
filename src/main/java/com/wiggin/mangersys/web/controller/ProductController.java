@@ -1,5 +1,7 @@
 package com.wiggin.mangersys.web.controller;
 
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -10,7 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wiggin.mangersys.domain.entity.Product;
 import com.wiggin.mangersys.service.ProductService;
+import com.wiggin.mangersys.util.BeanUtil;
 import com.wiggin.mangersys.util.Page;
+import com.wiggin.mangersys.util.report.BaseExport;
 import com.wiggin.mangersys.web.vo.request.ProductPageRequest;
 import com.wiggin.mangersys.web.vo.response.ProductPageResponse;
 
@@ -25,35 +29,7 @@ import com.wiggin.mangersys.web.vo.response.ProductPageResponse;
  */
 @RestController
 @RequestMapping("/product")
-public class ProductController {
-<<<<<<< HEAD
-	
-	@Autowired
-	private ProductService productService;
-	
-	@PostMapping("/list")
-	public Page<ProductPageResponse> getProductList(@RequestBody ProductPageRequest productReq) {
-		return productService.getProductList(productReq);
-	}
-	
-	@PostMapping("/add")
-	public void add(@RequestBody Product product) {
-		productService.saveProduct(product);
-	}
-	
-	@PostMapping("/delete")
-	public void delete(@RequestParam("id") Integer id) {
-		productService.deleteProduct(id);
-	}
-	
-	
-	@GetMapping("/syncProductList")
-	public Integer syncProductList() {
-		return productService.syncProductList();
-	}
-}
-=======
->>>>>>> 4ed170a7f57d29b28c07ce475e43f6daac074565
+public class ProductController implements BaseExport {
 
     @Autowired
     private ProductService productService;
@@ -77,8 +53,15 @@ public class ProductController {
     }
 
 
-    @GetMapping("syncProductList")
+    @GetMapping("/syncProductList")
     public Integer syncProductList() {
         return productService.syncProductList();
+    }
+
+
+    @Override
+    public Page<?> getExportList(Map<String, Object> parameter) {
+        ProductPageRequest productReq = BeanUtil.deepCopy(parameter, ProductPageRequest.class);
+        return getProductList(productReq);
     }
 }

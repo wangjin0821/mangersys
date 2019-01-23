@@ -1,4 +1,5 @@
 import request from '@/utils/request'
+import download from '@/utils/download'
 
 export function getList(params) {
   return request({
@@ -29,5 +30,12 @@ export function add(params) {
     url: 'product/add',
     method: 'post',
     data: params
+  })
+}
+
+export function downLoadMix(params) {
+  return download({
+    url: 'product/export',
+    params
   })
 }
